@@ -1,0 +1,47 @@
+service: aws-python-sqs-service
+
+provider:
+  name: aws
+  runtime: python3.9
+  stage: dev
+  region: ap-southeast-1
+  environment:
+    SLS_AWS_REGION: ${opt:region, self:provider.region}
+    NODE_ENV: "develop"
+    API_KEY: ${ssm:api-key}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sqs:ReceiveMessage
+        - sqs:DeleteMessage
+        - sqs:GetQueueAttributes
+        - lambda:InvokeFunction
+      Resource:
+        Fn::GetAtt:
+          - MyQueue
+          - Arn
+
+functions:
+  consumer:
+    handler: handler.consumer
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - MyQueue
+              - Arn
+
+  producer:
+    handler: handler.producer
+    timeout: 900
+    events:
+      - http:
+          path: /api/sqs/send
+          method: post
+
+resources:
+  Resources:
+    MyQueue:
+      Type: 'AWS::SQS::Queue'
+      Properties:
+        QueueName: 'myQueue'
