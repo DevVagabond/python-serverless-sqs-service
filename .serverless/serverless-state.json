@@ -12,7 +12,13 @@
       "environment": {
         "SLS_AWS_REGION": "ap-southeast-1",
         "NODE_ENV": "develop",
-        "API_KEY": "8n3567ht4v^%#tr8657rvT#%^*9n023ht57gv4mj4jmr289-d32489jmr50"
+        "API_KEY": "8n3567ht4v^%#tr8657rvT#%^*9n023ht57gv4mj4jmr289-d32489jmr50",
+        "SQS_URL": {
+          "Fn::GetAtt": [
+            "MyQueue",
+            "QueueUrl"
+          ]
+        }
       },
       "iamRoleStatements": [
         {
@@ -21,6 +27,7 @@
             "sqs:ReceiveMessage",
             "sqs:DeleteMessage",
             "sqs:GetQueueAttributes",
+            "sqs:SendMessage",
             "lambda:InvokeFunction"
           ],
           "Resource": {
@@ -221,7 +228,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/aws-python-sqs-service/dev/1716125801097-2024-05-19T13:36:41.097Z/aws-python-sqs-service.zip"
+                "S3Key": "serverless/aws-python-sqs-service/dev/1716360712214-2024-05-22T06:51:52.214Z/aws-python-sqs-service.zip"
               },
               "Handler": "handler.consumer",
               "Runtime": "python3.9",
@@ -232,7 +239,10 @@
                 "Variables": {
                   "SLS_AWS_REGION": "ap-southeast-1",
                   "NODE_ENV": "develop",
-                  "API_KEY": "8n3567ht4v^%#tr8657rvT#%^*9n023ht57gv4mj4jmr289-d32489jmr50"
+                  "API_KEY": "8n3567ht4v^%#tr8657rvT#%^*9n023ht57gv4mj4jmr289-d32489jmr50",
+                  "SQS_URL": {
+                    "$ref": "$[\"service\"][\"provider\"][\"environment\"][\"SQS_URL\"]"
+                  }
                 }
               },
               "Role": {
@@ -253,7 +263,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/aws-python-sqs-service/dev/1716125801097-2024-05-19T13:36:41.097Z/aws-python-sqs-service.zip"
+                "S3Key": "serverless/aws-python-sqs-service/dev/1716360712214-2024-05-22T06:51:52.214Z/aws-python-sqs-service.zip"
               },
               "Handler": "handler.producer",
               "Runtime": "python3.9",
@@ -264,7 +274,10 @@
                 "Variables": {
                   "SLS_AWS_REGION": "ap-southeast-1",
                   "NODE_ENV": "develop",
-                  "API_KEY": "8n3567ht4v^%#tr8657rvT#%^*9n023ht57gv4mj4jmr289-d32489jmr50"
+                  "API_KEY": "8n3567ht4v^%#tr8657rvT#%^*9n023ht57gv4mj4jmr289-d32489jmr50",
+                  "SQS_URL": {
+                    "$ref": "$[\"service\"][\"provider\"][\"environment\"][\"SQS_URL\"]"
+                  }
                 }
               },
               "Role": {
@@ -278,24 +291,24 @@
               "ProducerLogGroup"
             ]
           },
-          "ConsumerLambdaVersionmXJ4fpwgB5qRiQv2QtJEZ5zsZGiFKnnm1jqGFQJQw": {
+          "ConsumerLambdaVersiondcmYoFPugAj66Y5X8jJsYrEVInIw7Y1uLkEHBD4oJw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ConsumerLambdaFunction"
               },
-              "CodeSha256": "9X57AcvRS8lM6LlKYAGlN0cauQFR+NUrC4NUo7+wp/Q="
+              "CodeSha256": "627DhgRNn4K7KFODIAEtTrYcrqeTqZT3p0U0yYj1sMQ="
             }
           },
-          "ProducerLambdaVersionyLEo4iUapXlSe9TPtm5xwH7WhgIFTTURv8Ofx4n3JQI": {
+          "ProducerLambdaVersionEYpEE486PDCXTYDKGSZinG6DgGN3yxuTgKRH0rT5KQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProducerLambdaFunction"
               },
-              "CodeSha256": "9X57AcvRS8lM6LlKYAGlN0cauQFR+NUrC4NUo7+wp/Q="
+              "CodeSha256": "627DhgRNn4K7KFODIAEtTrYcrqeTqZT3p0U0yYj1sMQ="
             }
           },
           "ApiGatewayRestApi": {
@@ -395,7 +408,7 @@
               "ProducerLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1716125798414": {
+          "ApiGatewayDeployment1716360710280": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -485,7 +498,7 @@
           "ConsumerLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ConsumerLambdaVersionmXJ4fpwgB5qRiQv2QtJEZ5zsZGiFKnnm1jqGFQJQw"
+              "Ref": "ConsumerLambdaVersiondcmYoFPugAj66Y5X8jJsYrEVInIw7Y1uLkEHBD4oJw"
             },
             "Export": {
               "Name": "sls-aws-python-sqs-service-dev-ConsumerLambdaFunctionQualifiedArn"
@@ -494,7 +507,7 @@
           "ProducerLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProducerLambdaVersionyLEo4iUapXlSe9TPtm5xwH7WhgIFTTURv8Ofx4n3JQI"
+              "Ref": "ProducerLambdaVersionEYpEE486PDCXTYDKGSZinG6DgGN3yxuTgKRH0rT5KQ"
             },
             "Export": {
               "Name": "sls-aws-python-sqs-service-dev-ProducerLambdaFunctionQualifiedArn"
@@ -631,7 +644,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "ConsumerLambdaVersionmXJ4fpwgB5qRiQv2QtJEZ5zsZGiFKnnm1jqGFQJQw"
+        "versionLogicalId": "ConsumerLambdaVersiondcmYoFPugAj66Y5X8jJsYrEVInIw7Y1uLkEHBD4oJw"
       },
       "producer": {
         "handler": "handler.producer",
@@ -650,7 +663,7 @@
         "memory": 1024,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "ProducerLambdaVersionyLEo4iUapXlSe9TPtm5xwH7WhgIFTTURv8Ofx4n3JQI"
+        "versionLogicalId": "ProducerLambdaVersionEYpEE486PDCXTYDKGSZinG6DgGN3yxuTgKRH0rT5KQ"
       }
     },
     "resources": {
@@ -680,10 +693,10 @@
     },
     "layers": {},
     "isDashboardMonitoringPreconfigured": false,
-    "artifact": "/Users/shawonkanji/Documents/projects/python-serverless-sqs-service/.serverless/aws-python-sqs-service.zip"
+    "artifact": "/Users/shawonkanji/Documents/projects/python/python-serverless-sqs-service/.serverless/aws-python-sqs-service.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/aws-python-sqs-service/dev/1716125801097-2024-05-19T13:36:41.097Z",
+    "artifactDirectoryName": "serverless/aws-python-sqs-service/dev/1716360712214-2024-05-22T06:51:52.214Z",
     "artifact": "aws-python-sqs-service.zip"
   }
 }

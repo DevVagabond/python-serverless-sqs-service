@@ -9,12 +9,14 @@ provider:
     SLS_AWS_REGION: ${opt:region, self:provider.region}
     NODE_ENV: "develop"
     API_KEY: ${ssm:api-key}
+    SQS_URL:  !GetAtt MyQueue.QueueUrl
   iamRoleStatements:
     - Effect: Allow
       Action:
         - sqs:ReceiveMessage
         - sqs:DeleteMessage
         - sqs:GetQueueAttributes
+        - sqs:SendMessage
         - lambda:InvokeFunction
       Resource:
         Fn::GetAtt:
